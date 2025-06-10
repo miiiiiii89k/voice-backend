@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+import os  # <-- تم الإضافة هنا
 
 app = Flask(__name__)
 
@@ -17,5 +18,7 @@ def ask():
     reply = output[0]["generated_text"].replace(message, "").strip()
     return jsonify({"response": reply})
 
+# ✅ هذا هو السطر الصحيح لتشغيل الخادم على Render
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
